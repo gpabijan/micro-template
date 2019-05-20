@@ -1,18 +1,23 @@
-import {Controller, Get, HttpCode, Logger, Param, Post, Req} from '@nestjs/common';
-import {Observable, of} from 'rxjs';
+import {Body, Controller, Delete, Get, HttpCode, Logger, Param, Post, Put, Req} from '@nestjs/common';
 import {CreateUserDto} from './dto/create-user.dto';
+import {UpdateUserDto} from './dto/update-user.dto';
+import {UserService} from './user.service';
+import {User} from './interface/User';
 
 @Controller('user')
 export class UserController {
+    constructor(private readonly userService: UserService) {}
 
-    @Get()
-    async findAll(@Req() createUserDto: CreateUserDto): Promise<any[]> {
-        return [];
+    @Post()
+    @HttpCode(204)
+    async create(@Body() createUserDto: CreateUserDto) {
+        this.userService.create(createUserDto);
+        return 'This action adds a new user';
     }
 
-    @Get('all')
-    findAllObservable(@Req() createUserDto: CreateUserDto): Observable<any[]> {
-        return of ([]);
+    @Get()
+    async findAll(@Req() createUserDto: CreateUserDto): Promise<User[]> {
+        return this.userService.findAll();
     }
 
     @Get(':id')
@@ -21,9 +26,13 @@ export class UserController {
         return `This action returns a #${params.id} user`;
     }
 
-    @Post()
-    @HttpCode(204)
-    create() {
-        return 'This action adds a new user';
+    @Put(':id')
+    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+        return `This action updates a #${id} cat`;
+    }
+
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return `This action removes a #${id} user`;
     }
 }
