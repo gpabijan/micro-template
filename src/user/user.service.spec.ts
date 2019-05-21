@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 
+jest.mock('./user.service');
+
 describe('UserService', () => {
   let service: UserService;
 
@@ -9,10 +11,10 @@ describe('UserService', () => {
       providers: [UserService],
     }).compile();
 
-    service = module.get<UserService>(UserService);
+    service = module.get(UserService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('should return all users', () => {
+    expect(service.findAll()).toEqual([{ title: 'My first news' }]);
   });
 });

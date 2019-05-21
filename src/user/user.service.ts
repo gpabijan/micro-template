@@ -5,8 +5,8 @@ import {User} from './interface/User';
 export class UserService {
     private readonly users: User[] = [];
 
-    create(cat: User) {
-        this.users.push(cat);
+    create(user: User) {
+        this.users.push(user);
     }
 
     findAll(): User[] {

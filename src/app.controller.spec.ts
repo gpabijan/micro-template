@@ -19,4 +19,10 @@ describe('AppController', () => {
       expect(appController.getHello()).toBe('Hello World!');
     });
   });
+
+  describe('GoogleHealthCheck', () => {
+    it('should return "ok"', () => {
+      expect(appController.googleCloudCheck()).toBe('ok');
+    });
+  });
 });
