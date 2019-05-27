@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
+import {UserFactory} from '../../test/factories/user';
 
 jest.mock('./user.service');
 
 describe('UserService', () => {
   let service: UserService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [UserService],
     }).compile();
@@ -14,7 +15,9 @@ describe('UserService', () => {
     service = module.get(UserService);
   });
 
-  it('should return all users', () => {
-    expect(service.findAll()).toEqual([{ title: 'My first news' }]);
+  it('should return all users', async () => {
+    const users = UserFactory.buildList(10);
+    jest.spyOn(service, 'getAllUsers').mockResolvedValue(users);
+    expect(await service.getAllUsers()).toEqual(users);
   });
 });

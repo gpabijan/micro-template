@@ -9,7 +9,7 @@ export class UserService {
         this.users.push(user);
     }
 
-    findAll(): User[] {
+    getAllUsers(): User[] {
         return this.users;
     }
 

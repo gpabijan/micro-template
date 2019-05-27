@@ -2,29 +2,45 @@ import {CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor} from
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {RequestLog} from './interface/requestLog';
+import {ResponseLog} from './interface/responseLog';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
-  private zmienna: RequestLog = new RequestLog();
+  private req: RequestLog = new RequestLog();
+  private resp: ResponseLog = new ResponseLog();
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    Logger.log('Before...');
-    const request = context.switchToHttp().getRequest();
+    const ctx = context.switchToHttp();
+    const request = ctx.getRequest();
+    const response = ctx.getResponse();
+
+    // const request = context.switchToHttp().getRequest();
     this.setRequest(request);
-    Logger.log(this.zmienna);
+    new Logger('REST').log(this.req);
     const now = Date.now();
     return next
         .handle()
         .pipe(
-            tap(() => Logger.log(`After... ${Date.now() - now}ms`)),
+            tap(() => {
+              this.setResponse(response, now);
+              new Logger('REST').log(this.resp);
+            }),
         );
   }
 
   setRequest(request: any) {
-    this.zmienna.date = new Date();
-    this.zmienna.body = request.body;
-    this.zmienna.method = request.method;
-    this.zmienna.type = 'REQUEST';
-    this.zmienna.url = request.url;
+    this.req.date = new Date();
+    this.req.body = request.body;
+    this.req.method = request.method;
+    this.req.type = 'REQUEST';
+    this.req.url = request.url;
+  }
+
+  setResponse(response: any, now: any) {
+    this.resp.type = 'RESPONSE';
+    this.resp.code = response.statusCode;
+    this.resp.body = response.body;
+    this.resp.time = `${Date.now() - now}ms`;
+
   }
 }
