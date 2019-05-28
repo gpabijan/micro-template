@@ -6,13 +6,15 @@ import {APP_FILTER, APP_INTERCEPTOR} from '@nestjs/core';
 import {AllExceptionsFilter} from './common/filter/all-exceptions.filter';
 import {LoggingInterceptor} from './common/interceptor/logging.interceptor';
 import * as path from 'path';
-import { ConfigModule } from 'nestjs-config';
+import {ConfigModule} from 'nestjs-config';
+import {TypeOrmModule} from '@nestjs/typeorm';
 
 @Module({
   imports: [
     ConfigModule.load(path.resolve(__dirname, '**/!(*.d).config.{ts,js}'), {
       modifyConfigName: name => name.replace('.config', ''),
     }),
+    TypeOrmModule.forRoot(),
     UserModule,
   ],
   controllers: [AppController],

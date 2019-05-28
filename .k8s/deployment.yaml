@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: template-nest
+  namespace: coach
+  labels:
+    app: template-nest
+spec:
+  selector:
+    matchLabels:
+      app: template-nest
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: template-nest
+    spec:
+      containers:
+        - name: template-nest
+          image: //TODO HERE PUT DOCKER IMAGE LINK
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+          readinessProbe:
+            httpGet:
+              path: /_ah/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            successThreshold: 1
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: DB2_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db2-connection
+                  key: DB2_DATABASE
+            - name: DB2_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db2-credentials
+                  key: DB2_PASSWORD
