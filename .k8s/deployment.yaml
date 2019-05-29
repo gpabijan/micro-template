@@ -42,13 +42,51 @@ spec:
           env:
             - name: NODE_ENV
               value: "production"
-            - name: DB2_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: db2-connection
-                  key: DB2_DATABASE
-            - name: DB2_PASSWORD
+            - name: PORT
+              value: 8080
+            - name: TYPEORM_CONNECTION
               valueFrom:
                 secretKeyRef:
-                  name: db2-credentials
-                  key: DB2_PASSWORD
+                  name: typeorm_connection
+                  key: TYPEORM_CONNECTION
+            - name: TYPEORM_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: typeorm_connection
+                  key: TYPEORM_HOST
+            - name: TYPEORM_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: typeorm_connection
+                  key: TYPEORM_USERNAME
+            - name: TYPEORM_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: typeorm_connection
+                  key: TYPEORM_PASSWORD
+            - name: TYPEORM_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: typeorm_connection
+                  key: TYPEORM_DATABASE
+            - name: TYPEORM_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: typeorm_connection
+                  key: TYPEORM_PORT
+            - name: TYPEORM_SYNCHRONIZE
+              valueFrom:
+                secretKeyRef:
+                  name: typeorm_connection
+                  key: TYPEORM_SYNCHRONIZE
+            - name: TYPEORM_LOGGING
+              valueFrom:
+                secretKeyRef:
+                  name: typeorm_connection
+                  key: TYPEORM_LOGGING
+            - name: TYPEORM_ENTITIES
+              valueFrom:
+                secretKeyRef:
+                  name: typeorm_connection
+                  key: TYPEORM_ENTITIES
+
