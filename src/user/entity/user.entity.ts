@@ -1,17 +1,23 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, PrimaryColumn} from 'typeorm';
 import {IsAlpha} from 'class-validator';
 
 @Entity()
 export class User {
 
-    @PrimaryGeneratedColumn()
-    userId: number;
+    @PrimaryColumn()
+    mail: string;
 
-    @Column()
     @IsAlpha()
-    username: string;
+    @Column()
+    name: string;
+
+    @IsAlpha()
+    @Column()
+    surname: string;
 
     @Column()
-    birthDate: Date;
+    phone: string;
 
+    @Column()
+    country: string;
 }

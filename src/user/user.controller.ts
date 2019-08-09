@@ -2,15 +2,15 @@ import {Body, Controller, Delete, Get, HttpCode, Logger, Param, Post, Put, Req} 
 import {CreateUserDto} from './dto/create-user.dto';
 import {UpdateUserDto} from './dto/update-user.dto';
 import {UserService} from './user.service';
-import {User} from './interface/User';
+import {User} from './entity/user.entity';
 
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Post()
-    @HttpCode(204)
     async create(@Body() createUserDto: CreateUserDto) {
+        Logger.log(createUserDto);
         this.userService.create(createUserDto);
         return 'This action adds a new user';
     }

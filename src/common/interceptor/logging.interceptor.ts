@@ -16,23 +16,23 @@ export class LoggingInterceptor implements NestInterceptor {
 
     // const request = context.switchToHttp().getRequest();
     this.setRequest(request);
-    new Logger('REST').log(this.req);
+    new Logger('REST').log(JSON.stringify(this.req));
     const now = Date.now();
     return next
         .handle()
         .pipe(
             tap(() => {
               this.setResponse(response, now);
-              new Logger('REST').log(this.resp);
+              new Logger('REST').log(JSON.stringify(this.resp));
             }),
         );
   }
 
   setRequest(request: any) {
+    this.req.type = 'REQUEST';
     this.req.date = new Date();
     this.req.body = request.body;
     this.req.method = request.method;
-    this.req.type = 'REQUEST';
     this.req.url = request.url;
   }
 
